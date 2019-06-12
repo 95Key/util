@@ -3,11 +3,13 @@ package util
 import (
 	"bytes"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/opentracing/opentracing-go"
-	"github.com/satori/go.uuid"
-	"github.com/sirupsen/logrus"
 	"io/ioutil"
+	"strings"
+
+	"github.com/gin-gonic/gin"
+	opentracing "github.com/opentracing/opentracing-go"
+	uuid "github.com/satori/go.uuid"
+	"github.com/sirupsen/logrus"
 
 	"net/http"
 	"os"
@@ -36,7 +38,7 @@ func LoggerWithWriter(log *logrus.Logger) gin.HandlerFunc {
 
 		path := c.Request.URL.Path
 		raw := c.Request.URL.RawQuery
-		uuidst, _ := uuid.NewV4()
+		uuidst:= uuid.NewV4()
 		requestID := uuidst.String()
 		c.Set("RequestID", requestID)
 
@@ -93,9 +95,20 @@ func LoggerWithWriter(log *logrus.Logger) gin.HandlerFunc {
 			"Content-Type": c.Request.Header.Get("Content-Type"),
 		})
 
+		// @since 0.0.4 静态文件不打印日志
+		// TODO 从配置文件中获取  把中间件移动到 global 中
+		mode := "release"
+		if mode == "release" {
+			if strings.HasPrefix(path, "/js") {
+				return
+			}
+			if strings.HasPrefix(path, "/css") {
+				return
+			}
+		}
+
 		if statusCode == http.StatusOK || statusCode == http.StatusFound {
 			statusLog.Info("路由日志")
-
 			return
 		}
 		statusLog.Error("路由日志")
