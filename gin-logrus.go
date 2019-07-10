@@ -38,7 +38,7 @@ func LoggerWithWriter(log *logrus.Logger) gin.HandlerFunc {
 
 		path := c.Request.URL.Path
 		raw := c.Request.URL.RawQuery
-		uuidst:= uuid.NewV4()
+		uuidst,_:= uuid.NewV4()
 		requestID := uuidst.String()
 		c.Set("RequestID", requestID)
 
