@@ -33,6 +33,7 @@ require (
 	github.com/go-xorm/xorm v0.7.1
 	github.com/jinzhu/gorm v1.9.8
 	github.com/opentracing/opentracing-go v1.1.0
+	github.com/pkg/errors v0.8.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.4.2
 )
