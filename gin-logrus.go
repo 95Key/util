@@ -81,8 +81,8 @@ func LoggerWithWriter(log *logrus.Logger) gin.HandlerFunc {
 		// @since 0.0.12 body 过大的话 屏幕显示的很过分
 		// TODO 这里没考虑把所有大请求 比如文件上传全部存下 后面上日志服务器再说吧
 		logBody := string(body)
-		if len(logBody) > 200 {
-			logBody = logBody[0:200]
+		if len(logBody) > 500 {
+			logBody = logBody[0:500] + " ..."
 		}
 
 		statusLog := log.WithFields(logrus.Fields{
@@ -116,7 +116,6 @@ func LoggerWithWriter(log *logrus.Logger) gin.HandlerFunc {
 
 		if statusCode == http.StatusOK || statusCode == http.StatusFound {
 			statusLog.Info("路由日志")
-			fmt.Println("???")
 			return
 		}
 		statusLog.Error("路由日志")
