@@ -76,6 +76,16 @@ func LoggerWithWriter(log *logrus.Logger) gin.HandlerFunc {
 			path = path + "?" + raw
 		}
 
+		// @since 0.0.12 body 过大的话 屏幕显示的很过分
+		// TODO 这里没考虑把所有大请求 比如文件上传全部存下 后面上日志服务器再说吧
+		logBody := string(body)
+		if len(logBody) >200 {
+			logBody = logBody[0:200]
+		}
+
+
+
+
 		statusLog := log.WithFields(logrus.Fields{
 			"request_id":   requestID,
 			"latency":      latency,
@@ -89,7 +99,7 @@ func LoggerWithWriter(log *logrus.Logger) gin.HandlerFunc {
 			"errors":       c.Errors.Errors(),
 			"query":        c.Request.URL.Query(),
 			"PostForm":     c.Request.PostForm,
-			"body":         string(body),
+			"body":         logBody,
 			"Content-Type": c.Request.Header.Get("Content-Type"),
 		})
 
