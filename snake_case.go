@@ -2,6 +2,7 @@ package util
 
 import (
 	"unicode"
+	"strings"
 )
 
 // ToSnakeCase convert the given string to snake case following the Golang format:
@@ -19,4 +20,14 @@ func ToSnakeCase(in string) string {
 	}
 
 	return string(out)
+}
+
+// camelCase converts a _ delimited string to camel case
+// e.g. very_important_person => VeryImportantPerson
+func ToCamelCase(in string) string {
+	tokens := strings.Split(in, "_")
+	for i := range tokens {
+		tokens[i] = strings.Title(strings.Trim(tokens[i], " "))
+	}
+	return strings.Join(tokens, "")
 }
