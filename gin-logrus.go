@@ -40,7 +40,10 @@ func LoggerWithWriter(log *logrus.Logger) gin.HandlerFunc {
 		raw := c.Request.URL.RawQuery
 		uuidst := uuid.NewV4()
 		requestID := uuidst.String()
-		c.Set("RequestID", requestID)
+		reqID:= c.GetString("RequestID")
+		if reqID==""{
+			c.Set("RequestID", requestID)
+		}
 
 		var bodyBytes []byte
 		if c.Request.Body != nil {
